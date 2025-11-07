@@ -41,20 +41,19 @@ export default function PropertyCard({
   const isOwnedByCurrentPlayer = owner?.id === currentPlayer.id;
   const canBuy = !isOwned && currentPlayer.money >= property.price;
 
-  // Get icon based on property type
   const getPropertyIcon = () => {
     if (property.color === 'railroad') return '🚂';
     if (property.color === 'utility') return '⚡';
     if (property.name.includes('Mumbai') || property.name.includes('Delhi') || property.name.includes('Bangalore') || property.name.includes('Chennai') || property.name.includes('Kolkata')) {
-      return '🏙️'; // Major city - building icon
+      return '🏙️';
     }
     if (property.name.includes('Beach') || property.name.includes('Drive') || property.name.includes('Place')) {
-      return '🏛️'; // Premium area - monument icon
+      return '🏛️';
     }
     if (property.name.includes('Chowk') || property.name.includes('Old')) {
-      return '🕌'; // Historical area - monument/scene
+      return '🕌';
     }
-    return '🏘️'; // Default - building icon
+    return '🏘️';
   };
 
   return (

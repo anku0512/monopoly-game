@@ -85,7 +85,6 @@ export default function GameBoard({
         }}
       >
         {isVertical ? (
-          // Vertical squares (left and right sides)
           <>
             <div className="font-bold text-center leading-tight text-[9px] px-0.5 rotate-0">
               {property.name.length > 15 ? property.name.substring(0, 12) + '...' : property.name}
@@ -110,7 +109,6 @@ export default function GameBoard({
             </div>
           </>
         ) : isCorner ? (
-          // Corner squares
           <>
             <div className="font-bold text-center leading-tight text-[10px] px-1">
               {property.name.split(' ').slice(0, 2).join(' ')}
@@ -135,7 +133,6 @@ export default function GameBoard({
             </div>
           </>
         ) : (
-          // Horizontal squares (top and bottom rows)
           <>
             <div className="font-bold text-center leading-tight text-[8px] px-0.5" style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}>
               {property.name.length > 10 ? property.name.substring(0, 8) + '..' : property.name}
@@ -164,22 +161,10 @@ export default function GameBoard({
     );
   };
 
-  // Traditional square board layout
-  // Board structure (clockwise from START):
-  // Bottom left: START (0)
-  // Bottom row (left to right): 1-9
-  // Bottom right: Jail (10)
-  // Right side (bottom to top): 11-19
-  // Top right: Free Parking (20)
-  // Top row (right to left): 21-29
-  // Top left: Go To Jail (30)
-  // Left side (top to bottom): 31-39
-
   return (
     <div className="w-full flex justify-center items-center p-4">
       <div className="relative bg-gray-100 p-2 rounded-lg shadow-2xl">
         <div className="grid grid-cols-11 gap-0" style={{ width: '700px', height: '700px' }}>
-          {/* Top row: 20 (Free Parking) -> 21-29 -> 30 (Go To Jail) */}
           <div className="col-span-1">
             {renderSquare(20, 'corner')}
           </div>
@@ -194,15 +179,12 @@ export default function GameBoard({
             {renderSquare(30, 'corner')}
           </div>
 
-          {/* Middle rows: Left side (31-39), Center, Right side (19-11) */}
           {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((row) => (
             <div key={row} className="contents">
-              {/* Left side: positions 39 down to 31 */}
               <div className="col-span-1">
                 {renderSquare(39 - row, 'vertical')}
               </div>
 
-              {/* Center area */}
               {row === 4 ? (
                 <div className="col-span-9 bg-gradient-to-br from-green-100 via-blue-100 to-purple-100 border-4 border-gray-800 flex items-center justify-center">
                   <div className="text-center p-4 w-full">
@@ -210,7 +192,6 @@ export default function GameBoard({
                       🎲 MONOPOLY
                     </div>
                     
-                    {/* Dice Section */}
                     <div className="mb-4">
                       <div className="text-sm font-semibold text-gray-700 mb-2">Dice</div>
                       {hasRolled ? (
@@ -236,7 +217,6 @@ export default function GameBoard({
                       )}
                     </div>
 
-                    {/* Action Buttons */}
                     {hasRolled && (
                       <div className="space-y-2">
                         {canBuy && onBuyProperty && (
@@ -288,14 +268,12 @@ export default function GameBoard({
                 <div className="col-span-9 bg-gradient-to-br from-green-100 via-blue-100 to-purple-100 border-4 border-gray-800"></div>
               )}
 
-              {/* Right side: positions 11 up to 19 */}
               <div className="col-span-1">
                 {renderSquare(11 + row, 'vertical')}
               </div>
             </div>
           ))}
 
-          {/* Bottom row: 10 (Jail) -> 9-1 -> 0 (START) */}
           <div className="col-span-1">
             {renderSquare(10, 'corner')}
           </div>

@@ -47,12 +47,11 @@ export default function Game({ initialPlayers, onGameOver, onRestart }: GameProp
     const double = isDouble(dice);
     let newDoublesCount = double ? gameState.doublesCount + 1 : 0;
 
-    // Three doubles in a row = go to jail
     if (newDoublesCount === 3) {
       setGameState(prev => {
         const newPlayers = [...prev.players];
         const player = { ...newPlayers[prev.currentPlayerIndex] };
-        player.position = 10; // Jail position
+        player.position = 10;
         player.inJail = true;
         player.jailTurns = 0;
         newPlayers[prev.currentPlayerIndex] = player;
@@ -68,10 +67,8 @@ export default function Game({ initialPlayers, onGameOver, onRestart }: GameProp
       return;
     }
 
-    // Handle jail
     if (currentPlayer.inJail) {
       if (double) {
-        // Get out of jail with double
         setGameState(prev => {
           const newPlayers = [...prev.players];
           const player = { ...newPlayers[prev.currentPlayerIndex] };
@@ -88,14 +85,12 @@ export default function Game({ initialPlayers, onGameOver, onRestart }: GameProp
           };
         });
       } else {
-        // Stay in jail or pay
         setGameState(prev => {
           const newPlayers = [...prev.players];
           const player = { ...newPlayers[prev.currentPlayerIndex] };
           player.jailTurns += 1;
 
           if (player.jailTurns >= 3) {
-            // Must pay to get out
             player.money -= 50;
             player.inJail = false;
             player.jailTurns = 0;
@@ -123,24 +118,19 @@ export default function Game({ initialPlayers, onGameOver, onRestart }: GameProp
       return;
     }
 
-    // Normal move
     const totalSteps = dice[0] + dice[1];
     setGameState(prev => {
       const newPlayers = [...prev.players];
       let player = { ...newPlayers[prev.currentPlayerIndex] };
       
-      // Check if passing GO
       const passedGo = player.position + totalSteps >= BOARD_SIZE;
       player = movePlayer(player, totalSteps);
 
-      // Handle special spaces
       if (player.position === 30) {
-        // Go to Jail
         player.position = 10;
         player.inJail = true;
         player.jailTurns = 0;
       } else if (player.position === 4 || player.position === 38) {
-        // Tax spaces
         const taxAmount = player.position === 4 ? 200 : 100;
         player.money -= taxAmount;
       }
@@ -206,13 +196,11 @@ export default function Game({ initialPlayers, onGameOver, onRestart }: GameProp
     const rent = calculateRent(currentProperty, propertyOwner, PROPERTIES, ownerProperties);
 
     if (currentPlayer.money < rent) {
-      // Player goes bankrupt
       setGameState(prev => {
         const newPlayers = [...prev.players];
         const player = { ...newPlayers[prev.currentPlayerIndex] };
         const owner = newPlayers.find(p => p.id === propertyOwner.id)!;
         
-        // Transfer all assets to owner
         owner.money += player.money;
         owner.properties = [...owner.properties, ...player.properties];
         player.money = 0;
